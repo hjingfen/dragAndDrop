@@ -1,0 +1,18 @@
+.area {
+  display: flex;
+  margin: 20px 200px;
+}
+
+.left, .right {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.right {
+  margin-left: 10px;
+}
+
+.red {
+  color: red;
+}
