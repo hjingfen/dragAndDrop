@@ -8,7 +8,8 @@ export default class Home extends Component {
         this.state = {
             lists: [],
             value: '',
-            type: ''
+            type: '',
+            array2: ['list1', 'list2', 'list3', 'list4', 'list5', 'list6', 'list7']
         };
     }
 
@@ -43,13 +44,30 @@ export default class Home extends Component {
             newLists[originIndex ] = targetList;
             newLists[targetIndex] = value;
             this.setState({
-                lists: newLists
+                array2: newLists
             })
         }
     };
 
+    dragStart2 = (event, startValue) => {
+        this.setState({startValue});
+    };
+
+    dragEnter2 = (event, endValue, endIndex) => {
+        this.setState({endValue, endIndex});
+    };
+
+    drop2 = () => {
+        const {startValue, endValue, endIndex, array2} = this.state;
+        let arr2 = array2;
+        const startIndex = array2.indexOf(startValue);
+        arr2[startIndex] = endValue;
+        arr2[endIndex] = startValue;
+        this.setState({array2: arr2});
+    };
+
     render() {
-        const {lists=[]} = this.state;
+        const {lists = [], array2} = this.state;
         return (
             <div className="area">
                 <div className="left">
@@ -61,6 +79,8 @@ export default class Home extends Component {
                         }
                     </ul>
                 </div>
+
+                {/*开始拖动的那条数据 和路过的数据沿途都会交换  所以产生的中级效果举例来说就是 数据list1 list2 list3拖动list1到list3的位置 得到的结果是 list2 list3 list1也就是整体拖动数据到制定位置 中间的数据向上或下平移*/}
                 <div className="right" onDragOver={this.dragOver} onDrop={this.drop}>
                     <ul>
                         {
@@ -69,6 +89,21 @@ export default class Home extends Component {
                                     draggable="true"
                                     onDragStart={event => this.dragStart(event, list, 'change')}
                                     onDragEnter={event => this.dragEnter(event, list, index)}
+                                >{list}</li>
+                            ))
+                        }
+                    </ul>
+                </div>
+
+                {/*实现两条数据的位置交换  中间的数据都不变 只是开始拖动的那条数据和终止时指定的数据做交换*/}
+                <div className="right" onDragOver={this.dragOver} onDrop={this.drop2}>
+                    <ul>
+                        {
+                            array2.map((list, index) => (
+                                <li key={index}
+                                    draggable="true"
+                                    onDragStart={event => this.dragStart2(event, list)}
+                                    onDragEnter={event => this.dragEnter2(event, list, index)}
                                 >{list}</li>
                             ))
                         }
